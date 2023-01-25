@@ -33,9 +33,12 @@ contract SelfiePool is ReentrancyGuard {
         uint256 balanceBefore = token.balanceOf(address(this));
         require(balanceBefore >= borrowAmount, "Not enough tokens in pool");
         
-        token.transfer(msg.sender, borrowAmount);        
         
+        token.transfer(msg.sender, borrowAmount);        
+        //여기까지하면 Exploit컨트랙트에 150만 DVT가 있음. 
+
         require(msg.sender.isContract(), "Sender must be a deployed contract");
+        // Exploit컨트랙트의 receiveTokens함수실행 
         msg.sender.functionCall(
             abi.encodeWithSignature(
                 "receiveTokens(address,uint256)",
@@ -45,7 +48,6 @@ contract SelfiePool is ReentrancyGuard {
         );
         
         uint256 balanceAfter = token.balanceOf(address(this));
-
         require(balanceAfter >= balanceBefore, "Flash loan hasn't been paid back");
     }
 
