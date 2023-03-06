@@ -226,7 +226,10 @@ describe("[Challenge] Puppet", function () {
     await this.token
       .connect(attacker)
       .transfer(this.PuppetExploitContract.address, initAttackBalan);
-
+    console.log(
+      "attack전 transfer 후 attacker DVT balance",
+      (await this.token.balanceOf(attacker.address)).toString()
+    );
     // attack()함수 실행
     await this.PuppetExploitContract.attack1();
 
