@@ -152,6 +152,8 @@ describe("[Challenge] Free Rider", function () {
 
     console.log("1111");
     console.log("1111");
+    console.log("1111");
+    console.log("1111");
 
     const FreeRiderExploit = await ethers.getContractFactory(
       "FreeRiderExploit"
