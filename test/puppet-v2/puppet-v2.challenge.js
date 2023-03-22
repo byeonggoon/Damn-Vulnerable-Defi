@@ -198,6 +198,9 @@ describe("[Challenge] Puppet v2", function () {
       ).toString()
     );
     // 29.496494833197321980
+    /// 
+
+    console.log("mac air 2 !!")
 
     console.log((await attacker.getBalance()).toString());
 
